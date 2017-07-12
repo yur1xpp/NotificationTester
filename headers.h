@@ -18,4 +18,5 @@
 + (NSString *)randomID;
 + (void)lockscreenNotification;
 + (void)normalNotification;
++ (void)showNotifications;
 @end

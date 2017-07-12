@@ -42,6 +42,20 @@
 		</dict>
 		<dict>
 			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>label</key>
+			<string>Notification Sound</string>
+			<key>defaults</key>
+			<string>nl.d4ni.notificationtesterprefs</string>
+			<key>key</key>
+			<string>notificationSound</string>
+			<key>PostNotification</key>
+			<string>nl.d4ni.notificationtester/changed</string>
+			<key>default</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Number of notifications</string>

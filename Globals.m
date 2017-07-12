@@ -1,9 +1,11 @@
 static NSString* customText = @"This is a mighty fine Test Notification!";
 int customAmount = 1;
 BOOL randomApps = YES;
+BOOL notificationSound = NO;
 NSString *prefBundle = @"/var/mobile/Library/Preferences/nl.d4ni.notificationtesterprefs.plist";
 NSString *welcomeMessage = @"/var/mobile/Library/Preferences/nl.d4ni.notificationtesterwelcome.plist";
 NSString *bundleID = @"com.apple.Preferences";
+NSString *tweakName = @"NotificationTester";
 
 NSArray* excludedApps = [[NSArray alloc] initWithObjects:
   @"com.apple.DemoApp",
@@ -56,4 +58,9 @@ NSArray* excludedApps = [[NSArray alloc] initWithObjects:
   @"com.apple.gamecenter.GameCenterUIService",
   @"com.apple.HealthPrivacyService",
   @"com.apple.mobilesms.notification",
+  @"com.apple.mobilecal",
+  @"com.apple.mobiletimer",
+  @"com.apple.WebSheet",
+  @"com.apple.SafariViewService",
+  @"com.apple.AdSheetPhone",
   nil];

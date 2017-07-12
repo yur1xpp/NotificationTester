@@ -37,6 +37,8 @@
   }
   [applications retain];
   [applications release];
+
+  //Pull random bundleID from array.
   return [[applications objectAtIndex:arc4random() % [applications count]] valueForKey:@"id"];
 }
 
@@ -45,24 +47,32 @@
   [[%c(SBLockScreenManager) sharedInstance] lockUIFromSource:1 withOptions:nil];
   dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.7 * NSEC_PER_SEC));
   dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-    bundleID = @"com.apple.Preferences";
-    for (int i = 0; i < customAmount; i++) {
-      if (randomApps) {
-        bundleID = [self randomID];
-      }
-      [[objc_getClass("JBBulletinManager") sharedInstance] showBulletinWithTitle:@"NotificationTester" message:customText bundleID:bundleID];
-    }
+    [self showNotifications];
   });
 }
 
-//How normal notifications
+//Show normal notifications
 + (void)normalNotification {
+  [self showNotifications];
+}
+
++ (void)showNotifications {
   bundleID = @"com.apple.Preferences";
   for (int i = 0; i < customAmount; i++) {
     if (randomApps) {
       bundleID = [self randomID];
     }
-    [[objc_getClass("JBBulletinManager") sharedInstance] showBulletinWithTitle:@"NotificationTester" message:customText bundleID:bundleID];
+    if (notificationSound) {
+      [[objc_getClass("JBBulletinManager") sharedInstance] showBulletinWithTitle:tweakName
+                                                           message:customText
+                                                           bundleID:bundleID
+                                                           soundPath:@"/System/Library/Audio/UISounds/sms-received1.caf"];
+    }
+    else {
+      [[objc_getClass("JBBulletinManager") sharedInstance] showBulletinWithTitle:tweakName
+                                                           message:customText
+                                                           bundleID:bundleID];
+    }
   }
 }
 @end
@@ -72,7 +82,7 @@
 - (void)viewDidAppear:(_Bool)arg1 {
   %orig;
   if([[NSDictionary dictionaryWithContentsOfFile:welcomeMessage] objectForKey:@"Message"] == nil) {
-    UIAlertController *alertController1 = [UIAlertController alertControllerWithTitle:@"NotificationTester" message:@"\nThanks for downloading NotificationTester!\n\nThis tweak is free, but a lot of work was put into this.\nA donation is highly appreciated but never required!" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController1 = [UIAlertController alertControllerWithTitle:tweakName message:[NSString stringWithFormat:@"\nThanks for downloading %@%@", tweakName, @"\n\nThis tweak is free, but a lot of work was put into this.\nA donation is highly appreciated but never required!"] preferredStyle:UIAlertControllerStyleAlert];
       [alertController1 addAction:[UIAlertAction actionWithTitle:@"Donate! (:" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         NSMutableDictionary *preferences = [NSMutableDictionary dictionary];
         [preferences addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:welcomeMessage]];
@@ -105,6 +115,7 @@ static void loadPrefs() {
       customText = ( [prefs objectForKey:@"customText"] ? [prefs objectForKey:@"customText"] : customText );
       customAmount = ( [prefs objectForKey:@"customAmount"] ? [[prefs objectForKey:@"customAmount"] intValue] : customAmount );
       randomApps = ( [prefs objectForKey:@"randomApps"] ? [[prefs objectForKey:@"randomApps"] boolValue] : randomApps );
+      notificationSound = ( [prefs objectForKey:@"notificationSound"] ? [[prefs objectForKey:@"notificationSound"] boolValue] : notificationSound );
       if ([customText isEqualToString:@""]) {
         customText = @"This is a mighty fine Test Notification!";
       }
