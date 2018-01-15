@@ -56,7 +56,7 @@
   [self showNotifications];
 }
 
-+ (void)showNotifications {
++ (void)showNotifications:(NSString *)tweakname :(NSString *)customText  {
   bundleID = @"com.apple.Preferences";
   for (int i = 0; i < customAmount; i++) {
     if (randomApps) {
